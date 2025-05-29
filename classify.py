@@ -19,8 +19,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logging.info("Loading dataset...")
 df = pd.read_csv(os.path.join('data', 'clustered_data.csv'))
 
-# Reduce the dataset size (for testing)
-df = df.sample(n=1000, random_state=42)  # Taking a smaller sample for faster processing
+df = df.sample(n=20000, random_state=42)  
 
 # Prepare features and labels
 logging.info("Preparing features and labels...")
@@ -31,11 +30,11 @@ y = df['Cluster'].fillna(0).astype(int)
 logging.info("Splitting dataset into train and test...")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Define models with reduced complexity for faster training
+# Define models 
 models = {
-    'svm': SVC(C=1.0, kernel='linear'),  # Reduced complexity
-    'rf': RandomForestClassifier(n_estimators=10, max_depth=5, random_state=42),  # Reduced complexity
-    'knn': KNeighborsClassifier(n_neighbors=3)  # Reduced complexity
+    'svm': SVC(C=10.0, kernel='poly', gamma='scale' , degree=2) , # using poly kernel and more C value
+    'rf': RandomForestClassifier(n_estimators=100, max_depth=None, random_state=42),  # More trees, deeper
+    'knn': KNeighborsClassifier(n_neighbors=5, weights='distance', p=2)  # Euclidean, weighted neighbors
 }
 
 # Output directories
